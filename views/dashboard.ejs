@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dosya Yöneticisi</title>
+    <link href="/styles.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-200 font-sans">
+
+    <% if (messageData) { %>
+        <div class="absolute top-5 right-5 left-5 p-2 rounded-md text-center shadow lg:mx-96 mx-0
+                   <%= messageData.status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>"
+            id="messageData">
+            <%= messageData.message %>
+        </div>
+        <% } %>
+
+            <div class="container mx-auto p-8">
+                <div class="flex justify-between items-center mb-8">
+                    <h1 class="text-3xl font-semibold text-zinc-800">Dosya Yöneticisi</h1>
+                    <form action="/logout" method="GET">
+                        <button type="submit"
+                            class="bg-red-500 text-white px-6 py-2 rounded-md hover:bg-red-600 transition">Çıkış
+                            Yap</button>
+                    </form>
+                </div>
+
+                <h2 class="text-2xl font-semibold text-zinc-800 mb-4">Yüklenen Dosyalar</h2>
+                <table class="table-auto w-full mb-8 bg-white rounded-md border">
+                    <thead>
+                        <tr class="bg-white">
+                            <th class="px-6 py-3 border text-left">Dosya Adı</th>
+                            <th class="px-6 py-3 border text-left">İşlemler</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <% files.forEach(file=> { %>
+                            <tr>
+                                <td class="px-6 py-4 border text-zinc-800">
+                                    <%= file %>
+                                </td>
+                                <td class="px-6 py-4 border">
+                                    <a href="/dashboard/download/<%= file %>"
+                                        class="text-blue-500 hover:text-blue-700">İndir</a> |
+                                    <a href="/dashboard/delete/<%= file %>"
+                                        class="text-red-500 hover:text-red-700">Sil</a>
+                                </td>
+                            </tr>
+                            <% }); %>
+                    </tbody>
+                </table>
+
+                <h2 class="text-2xl font-semibold text-zinc-800 mb-4">Dosya Yükle</h2>
+                <form id="uploadForm" action="/dashboard/upload" method="POST" enctype="multipart/form-data"
+                    class="mb-8">
+                    <input type="file" name="file" id="fileInput"
+                        class="px-4 py-2 border bg-white rounded-md mb-4 w-full" required>
+                    <button type="submit"
+                        class="bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition w-full">Yükle</button>
+                </form>
+
+                <div id="progressContainer" class="hidden mt-4">
+                    <div class="text-sm mb-2 text-gray-600">Yükleme İlerlemesi:</div>
+                    <div class="bg-gray-300 rounded-md h-4 w-full">
+                        <div id="progressBar" class="bg-blue-500 h-full rounded-md" style="width: 0;"></div>
+                    </div>
+                    <div id="progressText" class="mt-2 text-zinc-800 text-center">0%</div>
+                </div>
+            </div>
+
+            <script>
+        <% if (messageData) { %>
+                    setTimeout(function () {
+                        document.getElementById('messageData').style.display = 'none';
+                    }, 3000);
+        <% } %>
+            </script>
+
+            <script>
+        const form = document.getElementById('uploadForm');
+                const fileInput = document.getElementById('fileInput');
+                const progressContainer = document.getElementById('progressContainer');
+                const progressBar = document.getElementById('progressBar');
+                const progressText = document.getElementById('progressText');
+
+                form.addEventListener('submit', function (event) {
+                    event.preventDefault();
+
+                    // Form verisi
+                    const formData = new FormData();
+                    formData.append('file', fileInput.files[0]);
+
+                    // İlerleme barı
+                    progressContainer.classList.remove('hidden');
+
+                    const xhr = new XMLHttpRequest();
+                    xhr.open('POST', '/dashboard/upload', true);
+
+                    // Yükleme ilerlemesi
+                    xhr.upload.onprogress = function (e) {
+                        if (e.lengthComputable) {
+                            const percentage = (e.loaded / e.total) * 100;
+                            progressBar.style.width = percentage + '%';
+                            progressText.textContent = Math.round(percentage) + '%';
+                        }
+                    };
+
+                    // Yükleme bitince çalışan kısım
+                    xhr.onload = function () {
+                        if (xhr.status === 200) {
+                            window.location.reload();
+                        }
+                    };
+
+                    // Form verisini gönder
+                    xhr.send(formData);
+                });
+            </script>
+</body>
+
+</html>
