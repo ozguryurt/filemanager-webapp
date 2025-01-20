@@ -49,7 +49,7 @@ http://localhost:3000
 ## 📸 Ekran Görüntüleri
 
 ### Giriş ekranı
-![1](https://github.com/user-attachments/assets/949e2fed-0b3f-49b6-b165-40be46e18747)
+![1](https://github.com/user-attachments/assets/9690167d-0969-4e93-ae47-0138480ab67e)
 
 ### Kullanıcı ekranı
-![2](https://github.com/user-attachments/assets/16563db7-8b1a-4941-8cf9-d41002277110)
+![2](https://github.com/user-attachments/assets/ff3a66a8-96e2-4c6c-b69f-c5177ffc7c8b)
