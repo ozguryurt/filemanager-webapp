@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="tr">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Giriş Yap</title>
+    <link href="/styles.css" rel="stylesheet">
+</head>
+
+<body class="bg-gray-200 flex items-center justify-center h-screen">
+    <div class="bg-white p-8 rounded-md w-96">
+        <h2 class="text-2xl font-bold mb-4">Giriş Yap</h2>
+
+        <!-- Hata Bildirim Kutusu -->
+        <% if (messageData) { %>
+        <div class="absolute top-5 right-5 left-5 p-2 rounded-md text-center shadow lg:mx-96 mx-0
+                       <%= messageData.status === 'success' ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800' %>"
+            id="messageData">
+            <%= messageData.message %>
+        </div>
+        <% } %>
+
+        <form action="/login" method="POST" class="space-y-4">
+            <input type="text" name="username" placeholder="Kullanıcı adı" required
+                class="w-full p-2 border border-gray-300 rounded-md" />
+            <input type="password" name="password" placeholder="Şifre" required
+                class="w-full p-2 border border-gray-300 rounded-md" />
+            <button type="submit" class="w-full bg-blue-500 text-white p-2 rounded-md">Giriş Yap</button>
+        </form>
+    </div>
+
+    <script>
+        // Hata mesajını 3 saniye sonra kaybolacak şekilde ayarla
+        <% if (messageData) { %>
+            setTimeout(function () {
+                document.getElementById('messageData').style.display = 'none';
+            }, 3000);
+        <% } %>
+    </script>
+</body>
+
+</html>
